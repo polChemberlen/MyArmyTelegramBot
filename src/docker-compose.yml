@@ -1,0 +1,27 @@
+services:
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: MyArmyTelegramBot.Worker/Dockerfile
+    container_name: my_army_telegram_bot
+    restart: always
+    env_file:
+      - MyArmyTelegramBot.Worker/.env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: my_army_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: MyArmyBotDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
